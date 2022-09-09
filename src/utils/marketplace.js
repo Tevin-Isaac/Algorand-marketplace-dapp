@@ -26,7 +26,7 @@ class Product {
         this.owner = owner;
     }
 }
-//...
+
 // Compile smart contract in .teal format to program
 const compileProgram = async (programSource) => {
     let encoder = new TextEncoder();
@@ -40,8 +40,6 @@ export const createProductAction = async (senderAddress, product) => {
     console.log("Adding product...")
 
     let params = await algodClient.getTransactionParams().do();
-    params.fee = algosdk.ALGORAND_MIN_TX_FEE;
-    params.flatFee = true;
 
     // Compile programs
     const compiledApprovalProgram = await compileProgram(approvalProgram)
@@ -91,14 +89,12 @@ export const createProductAction = async (senderAddress, product) => {
     console.log("Created new app-id: ", appId);
     return appId;
 }
-//...
+
 // BUY PRODUCT: Group transaction consisting of ApplicationCallTxn and PaymentTxn
 export const buyProductAction = async (senderAddress, product, count) => {
     console.log("Buying product...");
 
     let params = await algodClient.getTransactionParams().do();
-    params.fee = algosdk.ALGORAND_MIN_TX_FEE;
-    params.flatFee = true;
 
     // Build required app args as Uint8Array
     let buyArg = new TextEncoder().encode("buy")
@@ -139,14 +135,12 @@ export const buyProductAction = async (senderAddress, product, count) => {
     // Notify about completion
     console.log("Group transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
 }
-//...
+
 // DELETE PRODUCT: ApplicationDeleteTxn
 export const deleteProductAction = async (senderAddress, index) => {
     console.log("Deleting application...");
 
     let params = await algodClient.getTransactionParams().do();
-    params.fee = algosdk.ALGORAND_MIN_TX_FEE;
-    params.flatFee = true;
 
     // Create ApplicationDeleteTxn
     let txn = algosdk.makeApplicationDeleteTxnFromObject({
@@ -173,7 +167,6 @@ export const deleteProductAction = async (senderAddress, index) => {
     console.log("Deleted app-id: ", appId);
 }
 
-//...
 // GET PRODUCTS: Use indexer
 export const getProductsAction = async () => {
     console.log("Fetching products...")
